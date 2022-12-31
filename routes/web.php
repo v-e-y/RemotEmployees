@@ -1,18 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
+use App\Http\Controllers\AppController;
+use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [AppController::class, 'index'])
+    ->name('index');
+
+require __DIR__ . '/product.php';
+require __DIR__ . '/category.php';
+
+Route::get('{category_name}/{product_id}', [CategoryController::class, 'showProducts'])
+    ->name('categoryProducts');
