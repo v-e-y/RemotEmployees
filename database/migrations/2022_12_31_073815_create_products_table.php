@@ -8,25 +8,25 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
      * @return void
      */
     public function up()
     {
-        Schema::create('password_resets', function (Blueprint $table) {
-            $table->string('email')->index();
-            $table->string('token');
-            $table->timestamp('created_at')->nullable();
+        Schema::create('products', function (Blueprint $table) {
+            $table->id();
+            $table->bigInteger('price'); // we will store prise multiply  by 100. For show divide by 100
+            $table->string('name', 150);
+            $table->string('description', 2000);
+            $table->timestamps();
         });
     }
 
     /**
      * Reverse the migrations.
-     *
      * @return void
      */
     public function down()
     {
-        Schema::dropIfExists('password_resets');
+        Schema::dropIfExists('products');
     }
 };
