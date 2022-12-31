@@ -10,6 +10,8 @@ class Condition extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     /**
      * Relations
      */

@@ -20,7 +20,7 @@ return new class extends Migration
         });
 
         Schema::table('products', function (Blueprint $table) {
-            $table->foreignId('condition')->constrained('conditions');
+            $table->foreignId('condition_id')->constrained('conditions');
         });
     }
 
