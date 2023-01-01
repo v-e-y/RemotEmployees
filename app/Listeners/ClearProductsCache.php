@@ -2,13 +2,14 @@
 
 namespace App\Listeners;
 
-use App\Events\ProductUpdated;
+use App\Events\ProductCreated;
+use App\Events\ProductDeleted;
 use App\Models\Product;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Cache;
 
-class ClearProductCache
+class ClearProductsCache
 {
     /**
      * Create the event listener.
@@ -21,12 +22,11 @@ class ClearProductCache
 
     /**
      * Handle the event.
-     * @param  \App\Events\ProductUpdated  $event
+     * @param  \App\Events\ProductCreated  $event
      * @return void
      */
-    public function handle(ProductUpdated $event)
+    public function handle(ProductCreated|ProductDeleted $event)
     {
         Cache::forget(Product::class);
-        Cache::forget(Product::class . '_id_' . $event->product->id);
     }
 }

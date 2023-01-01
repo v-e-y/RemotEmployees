@@ -20,9 +20,16 @@ class Product extends Model
     ];
 
     protected $with = [
-        'condition'
+        'condition',
+        'categories'
     ];
 
+    /**
+     * Modify Product price.
+     * Get - divide by 100.
+     * Set - multiply by 100.
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
     protected function price(): Attribute
     {
         return Attribute::make(

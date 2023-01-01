@@ -3,15 +3,20 @@
 @section('main')
     <section class="col-12 col-md-9 col-lg-6">
         <article class="card">
-            <form action="{{ route('product.store') }}" method="post" class="card-body">
-                @csrf
+            @if (isset($product))
+                <form action="{{ route('product.update', [$product->id]) }}" method="post" class="card-body">
+                {{ method_field('PATCH') }}
+            @else
+                <form action="{{ route('product.store') }}" method="post" class="card-body">
+            @endif
                 <fieldset>
+                    @csrf
                     <div class="mb-3">
                         <label for="name" class="form-label">Lot name</label>
                         <input 
                             type="text" 
                             class="form-control @error('name') is-invalid @enderror" 
-                            value="{{ old('name') }}"
+                            value="{{ old('name') ?? $product->name ?? '' }}"
                             name="name" 
                             id="name"
                             required 
@@ -28,7 +33,7 @@
                                         type="number" 
                                         step="0.01" 
                                         class="form-control @error('price') is-invalid @enderror" 
-                                        value="{{ old('price') }}"
+                                        value="{{ old('price') ?? $product->price ?? ''}}"
                                         name="price" 
                                         id="price"
                                         required
@@ -47,7 +52,17 @@
                                 >
                                     <option selected disabled hidden>Choose condition</option>
                                     @foreach ($conditions as $condition)
-                                        <option value="{{ $condition->id }}">{{ $condition->name }}</option>
+                                        <option 
+                                            value="{{ $condition->id }}"
+                                            @if (old('condition_id') === $condition->id)
+                                                selected
+                                            @endif
+                                            @if (isset($product) && $product->condition_id === $condition->id)
+                                                selected
+                                            @endif
+                                        >
+                                            {{ $condition->name }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -55,8 +70,17 @@
                     </section>
                     
                     <div class="mb-3">
-                        <label for="description" class="form-label">Description</label>
-                        <textarea name="description" id="description" cols="30" rows="10" class="form-control @error('description') is-invalid @enderror" required>{{ old('description') }}</textarea>
+                        <label for="description" class="form-label">
+                            Description
+                        </label>
+                        <textarea 
+                            name="description" 
+                            id="description" 
+                            cols="30" 
+                            rows="10" 
+                            class="form-control @error('description') is-invalid @enderror" 
+                            required
+                        >{{ old('description') ?? $product->description ?? ''}}</textarea>
                     </div>
                     @if (isset($categories) && $categories->count())
                         <section class="row g-2">
@@ -74,6 +98,11 @@
                                         name="categories[]"
                                         id="{{ $category->slug }}"
                                         {{ (is_array(old('categories')) and in_array($category['slug'], old('categories'))) ? ' checked' : '' }}
+                                        @if (isset($product) && $product->categories->count())
+                                            @foreach ($product->categories as $pCategory)
+                                                {{ ($pCategory->id === $category->id) ?  ' checked'  : '' }}
+                                            @endforeach
+                                        @endif 
                                     >
                                     <label class="btn btn-sm btn-outline-secondary" for="{{ $category->slug }}">
                                         {{ $category->name }}

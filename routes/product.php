@@ -15,12 +15,12 @@ Route::name('product.')->prefix('products')->group(function () {
     Route::get('/{product_id}', [ProductController::class, 'show'])
         ->name('show');
 
-    Route::get('/{product}/edit', [ProductController::class, 'edit'])
+    Route::get('/{product_id}/edit', [ProductController::class, 'edit'])
         ->name('edit');
 
-    Route::post('/{product}/update', [ProductController::class, 'update'])
+    Route::patch('/{product_id}/update', [ProductController::class, 'update'])
         ->name('update');
 
-    Route::get('/{product}/destroy', [ProductController::class, 'destroy'])
+    Route::get('/{product_id}/destroy', [ProductController::class, 'destroy'])
         ->name('destroy');
 });

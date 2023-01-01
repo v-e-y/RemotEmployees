@@ -2,27 +2,17 @@
 
 namespace App\Http\Controllers\Product;
 
-use App\Events\ProductCreated;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductRequest;
 use App\Models\Product;
 use App\Repositories\CategoryRepository;
 use App\Repositories\ConditionRepository;
-use Illuminate\Http\Response;
-use Illuminate\Support\Arr;
+use App\Repositories\ProductRepository;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
-use Symfony\Component\HttpKernel\HttpCache\StoreInterface;
 
 class ProductController extends Controller
-{
-    
-    public function index()
-    {
-        //
-    }
-
-    
+{   
     public function create(): View
     {
         return view('products.create', [
@@ -33,21 +23,16 @@ class ProductController extends Controller
 
     public function store(StoreProductRequest $request)
     {
-        /**
-         * @var Product created product
-         */
-        $product = Product::create(
-            Arr::only($request->validated(), app(Product::class)->getFillable())
-        );
+        try {
+            $product = ProductRepository::createProduct($request->validated());
+        } catch (\Throwable $th) {
+            Log::info($th->getMessage());
 
-        if (array_key_exists('categories', $request->validated())) {
-            $product->categories()->attach(
-                $request->validated('categories')
+            return redirect()->back()->withErrors(
+                ['message' => 'Sorry can`t create this product now']
             );
         }
 
-        ProductCreated::dispatch($product);
-        
         return redirect(
             route('product.show', [$product->id]),
             201
@@ -73,21 +58,30 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        dd(
-            __METHOD__,
-            $product
-        );
+        return view('products.create', [
+            'product' => $product,
+            'categories' => CategoryRepository::getAllCategories(),
+            'conditions' => ConditionRepository::getAllConditions()
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function update(StoreProductRequest $request, Product $product)
     {
-        //
+
+        try {
+            $product = ProductRepository::updateProduct($product, $request->validated());
+        } catch (\Throwable $th) {
+            Log::info($th->getMessage());
+
+            return redirect()->back()->withErrors(
+                ['message' => 'Sorry can`t update this product now']
+            );
+        }
+        
+        return redirect(
+            route('product.show', [$product->id]),
+            201
+        );
     }
 
     /**
@@ -95,8 +89,20 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Product $product)
     {
-        //
+        try {
+            ProductRepository::destroyProduct($product);
+        } catch (\Throwable $th) {
+            Log::info($th->getMessage());
+            
+            return redirect()->back()->withErrors(
+                ['message' => 'Cant`t delete this product now']
+            );
+        }
+
+        return redirect(
+            '/'
+        );
     }
 }
