@@ -8,6 +8,7 @@ use App\Http\Requests\StoreProductRequest;
 use App\Models\Product;
 use App\Repositories\CategoryRepository;
 use App\Repositories\ConditionRepository;
+use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 use Illuminate\View\View;
 use Symfony\Component\HttpKernel\HttpCache\StoreInterface;
@@ -51,12 +52,15 @@ class ProductController extends Controller
     }
 
     /**
-     * 
-     * @return \Illuminate\Http\Response
+     * Show specific Product
+     * @param \App\Models\Product $product
+     * @return \Illuminate\View\View
      */
-    public function show(Product $product)
+    public function show(Product $product): View
     {
-        dd($product);
+        return view('products.show', [
+            'product' => $product
+        ]);
     }
 
     /**
@@ -64,9 +68,12 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Product $product)
     {
-        //
+        dd(
+            __METHOD__,
+            $product
+        );
     }
 
     /**
