@@ -5,13 +5,31 @@ namespace App\Models;
 use App\Models\Category;
 use App\Models\Condition;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Product extends Model
 {
     use HasFactory;
 
-    protected $guarded = []; 
+    protected $fillable = [
+        'name',
+        'price',
+        'description',
+        'condition_id'
+    ];
+
+    protected $with = [
+        'condition'
+    ];
+
+    protected function price(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($price) => $price / 100,
+            set: fn ($price) => $price * 100,
+        );
+    }
 
     /**
      * Relations

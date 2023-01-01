@@ -12,6 +12,9 @@ Route::name('product.')->prefix('products')->group(function () {
     Route::post('/store', [ProductController::class, 'store'])
         ->name('store');
 
+    Route::get('/{product_id}', [ProductController::class, 'show'])
+        ->name('show');
+
     Route::get('/{product}/edit', [ProductController::class, 'edit'])
         ->name('edit');
 

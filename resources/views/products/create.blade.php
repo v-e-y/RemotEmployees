@@ -18,21 +18,42 @@
                             autofocus
                         >
                     </div>
-                    <div class="mb-3">
-                        <label for="price" class="form-label">Price</label>
-                        <div class="input-group">
-                            <span class="input-group-text">$</span>
-                            <input 
-                                type="number" 
-                                step="0.01" 
-                                class="form-control @error('price') is-invalid @enderror" 
-                                value="{{ old('price') }}"
-                                name="price" 
-                                id="price"
-                                required
-                            >
+                    <section class="row g-2">
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label for="price" class="form-label">Price</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input 
+                                        type="number" 
+                                        step="0.01" 
+                                        class="form-control @error('price') is-invalid @enderror" 
+                                        value="{{ old('price') }}"
+                                        name="price" 
+                                        id="price"
+                                        required
+                                    >
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                        @if (isset($conditions) && $conditions->count())
+                            <div class="col-6">
+                                <label for="condition_id" class="form-label">Condition</label>
+                                <select 
+                                    class="form-select" 
+                                    aria-label="Select lot condition"
+                                    id="condition_id"
+                                    name="condition_id"
+                                >
+                                    <option selected disabled hidden>Choose condition</option>
+                                    @foreach ($conditions as $condition)
+                                        <option value="{{ $condition->id }}">{{ $condition->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        @endif
+                    </section>
+                    
                     <div class="mb-3">
                         <label for="description" class="form-label">Description</label>
                         <textarea name="description" id="description" cols="30" rows="10" class="form-control @error('description') is-invalid @enderror" required>{{ old('description') }}</textarea>
