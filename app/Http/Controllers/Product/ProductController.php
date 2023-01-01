@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Product;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreProductRequest;
+use App\Repositories\CategoryRepository;
 use Illuminate\View\View;
+use Symfony\Component\HttpKernel\HttpCache\StoreInterface;
 
 class ProductController extends Controller
 {
@@ -18,19 +21,13 @@ class ProductController extends Controller
     public function create(): View
     {
         return view('products.create', [
-            //'categories' => 
+            'categories' => CategoryRepository::getAllCategories()
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
-        //
+        dd($request->validated());
     }
 
     /**

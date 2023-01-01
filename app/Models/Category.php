@@ -10,7 +10,11 @@ class Category extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'name',
+        'slug',
+        'description'
+    ];
 
     /**
      * Relations
