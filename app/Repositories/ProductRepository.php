@@ -27,7 +27,7 @@ final class ProductRepository
      */
     public static function getAllProducts(): Collection
     {
-        return Cache::rememberForever('products', function () {
+        return Cache::rememberForever(Product::class, function () {
             return Product::all(
                 ['id', 'name', 'price', 'description', 'condition_id']
             );

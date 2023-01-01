@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Product;
 
+use App\Events\ProductCreated;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductRequest;
@@ -45,6 +46,8 @@ class ProductController extends Controller
             );
         }
 
+        ProductCreated::dispatch($product);
+        
         return redirect(
             route('product.show', [$product->id]),
             201
