@@ -12,12 +12,15 @@ Route::name('category.')->prefix('category')->group(function () {
     Route::post('/store', [CategoryController::class, 'store'])
         ->name('store');
 
-    Route::get('/{category}/edit', [CategoryController::class, 'edit'])
+    Route::get('/{category_slug}', [CategoryController::class, 'showProducts'])
+        ->name('products');
+
+    Route::get('/{category_id}/edit', [CategoryController::class, 'edit'])
         ->name('edit');
 
-    Route::post('/{category}/update', [CategoryController::class, 'update'])
+    Route::post('/{category_id}/update', [CategoryController::class, 'update'])
         ->name('update');
 
-    Route::get('/{category}/destroy', [CategoryController::class, 'destroy'])
+    Route::get('/{category_id}/destroy', [CategoryController::class, 'destroy'])
         ->name('destroy');
 });

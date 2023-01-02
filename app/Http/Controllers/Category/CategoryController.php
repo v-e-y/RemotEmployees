@@ -1,85 +1,101 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Category;
 
-use Illuminate\Http\Request;
+use App\Models\Category;
+use Illuminate\View\View;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Repositories\CategoryRepository;
+use App\Http\Requests\StoreCategoryRequest;
+use Illuminate\Http\RedirectResponse;
 
 class CategoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function create(): View
     {
-        //
+        return view('categories.create');
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Create/Store Category
+     * @param \App\Http\Requests\StoreCategoryRequest $request
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function create()
+    public function store(StoreCategoryRequest $request): RedirectResponse
     {
-        //
+        try {
+            /**
+             * @var Category|Exception
+             */
+            $category = CategoryRepository::createCategory($request->validated());
+        } catch (\Throwable $th) {
+            Log::info($th->getMessage());
+            return redirect()->back()->withErrors(
+                ['message' => 'We are sorry, can`t create category write now']
+            );
+        }
+
+        return redirect(
+            route('category.products', [
+                $category->slug
+            ]),
+            201
+        );
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * Show form for update Category
+     * @param \App\Models\Category $category
+     * @return \Illuminate\View\View
      */
-    public function store(Request $request)
+    public function edit(Category $category): View
     {
-        //
+        return view('categories.create', [
+            'category' => $category
+        ]);
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Update Category
+     * @param \App\Http\Requests\StoreCategoryRequest $request Validate data
+     * @param \App\Models\Category $category Category for update
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function show($id)
+    public function update(StoreCategoryRequest $request, Category $category): RedirectResponse
     {
-        //
+        try {
+            $category = CategoryRepository::updateCategory(
+                $request->validated(),
+                $category
+            );
+        } catch (\Throwable $th) {
+            Log::info($th->getMessage());
+            return redirect()->back()->withErrors(
+                ['message' => 'We are sorry, can`t update category write now']
+            );
+        }
+
+        return redirect(
+            route('category.products', [
+                $category->slug
+            ]),
+            201
+        );
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         //
+    }
+
+    public function showProducts(Category $category): View
+    {
+        return view('categories.category', [
+            'category' => $category,
+            'products' => CategoryRepository::getCategoryProducts($category)
+        ]);
     }
 }

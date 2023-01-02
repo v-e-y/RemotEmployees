@@ -27,9 +27,9 @@
                 <li class="nav-item">
                     <a 
                         class="nav-link active" 
-                        href="#"
+                        href="{{ route('category.create') }}"
                     >
-                        Create deal
+                        Create category
                     </a>
                 </li>
             </ul>

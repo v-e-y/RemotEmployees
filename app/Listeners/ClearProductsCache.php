@@ -2,12 +2,13 @@
 
 namespace App\Listeners;
 
+use App\Models\Product;
 use App\Events\ProductCreated;
 use App\Events\ProductDeleted;
-use App\Models\Product;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
+use App\Events\CategoryUpdated;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
 class ClearProductsCache
 {
@@ -28,5 +29,11 @@ class ClearProductsCache
     public function handle(ProductCreated|ProductDeleted $event)
     {
         Cache::forget(Product::class);
+
+        if ($event->product->categories->count()) {
+            foreach ($event->product->categories as $category) {
+                CategoryUpdated::dispatch($category);
+            }
+        }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\Events\CategoryUpdated;
 use App\Events\ProductUpdated;
 use App\Models\Product;
 use Illuminate\Support\Facades\Cache;
@@ -28,5 +29,11 @@ class ClearProductCache
     {
         Cache::forget(Product::class);
         Cache::forget(Product::class . '_id_' . $event->product->id);
+
+        if ($event->product->categories->count()) {
+            foreach ($event->product->categories as $category) {
+                CategoryUpdated::dispatch($category);
+            }
+        }
     }
 }

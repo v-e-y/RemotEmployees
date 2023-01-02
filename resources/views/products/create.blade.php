@@ -68,7 +68,6 @@
                             </div>
                         @endif
                     </section>
-                    
                     <div class="mb-3">
                         <label for="description" class="form-label">
                             Description
@@ -114,7 +113,7 @@
                 </fieldset>
                 <div class="d-grid mt-4 pt-4 border-top gap-2">
                     <button type="submit" class="btn btn-outline-success">
-                        Add lot
+                        {{ (isset($product)) ? 'Update' : 'Add' }} lot
                     </button>
                 </div>
             </form>

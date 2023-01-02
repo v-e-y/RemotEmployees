@@ -2,12 +2,13 @@
 
 namespace App\Providers;
 
-use App\Repositories\ProductRepository;
-use Illuminate\Cache\RateLimiting\Limit;
-use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
+use App\Repositories\ProductRepository;
+use App\Repositories\CategoryRepository;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -38,6 +39,14 @@ class RouteServiceProvider extends ServiceProvider
 
         Route::bind('product_id', function ($id) {
             return ProductRepository::getProduct($id);
+        });
+
+        Route::bind('category_id', function ($id) {
+            return CategoryRepository::getCategory($id);
+        });
+
+        Route::bind('category_slug', function ($slug) {
+            return CategoryRepository::getCategory(null, $slug);
         });
     }
 

@@ -99,12 +99,11 @@ final class ProductRepository
      */
     public static function destroyProduct(Product $product): bool|Exception
     {
-
         if (! $product->delete()) {
             return throw new Exception("Cant`t delete product " . $product->id . " now", 1);
         }
 
-        ProductDeleted::dispatch();
+        ProductDeleted::dispatch($product);
 
         return true;
     }

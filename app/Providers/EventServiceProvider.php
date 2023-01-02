@@ -2,9 +2,14 @@
 
 namespace App\Providers;
 
+use App\Events\CategoryCreated;
+use App\Events\CategoryDeleted;
+use App\Events\CategoryUpdated;
 use App\Events\ProductCreated;
 use App\Events\ProductDeleted;
 use App\Events\ProductUpdated;
+use App\Listeners\ClearCategoriesCache;
+use App\Listeners\ClearCategoryCache;
 use App\Listeners\ClearProductCache;
 use App\Listeners\ClearProductsCache;
 use Illuminate\Support\Facades\Event;
@@ -30,7 +35,16 @@ class EventServiceProvider extends ServiceProvider
         ],
         ProductDeleted::class => [
             ClearProductsCache::class
-        ]
+        ],
+        CategoryCreated::class => [
+            ClearCategoriesCache::class
+        ],
+        CategoryUpdated::class => [
+            ClearCategoryCache::class
+        ],
+        CategoryDeleted::class => [
+            ClearCategoryCache::class
+        ] 
     ];
 
     /**

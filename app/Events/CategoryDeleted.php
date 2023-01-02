@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -11,19 +11,19 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class ProductDeleted
+class CategoryDeleted
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public Product $product;
+    public Category $category;
 
     /**
      * Create a new event instance.
      * @return void
      */
-    public function __construct(Product $product)
+    public function __construct(Category $category)
     {
-        $this->product = $product;
+        $this->category = $category;
     }
 
     /**
