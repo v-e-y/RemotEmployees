@@ -14,6 +14,10 @@ use Illuminate\Http\RedirectResponse;
 
 class CategoryController extends Controller
 {
+    /**
+     * Show form for create Category
+     * @return \Illuminate\View\View
+     */
     public function create(): View
     {
         return view('categories.create');
@@ -86,16 +90,38 @@ class CategoryController extends Controller
         );
     }
 
-    public function destroy($id)
+    /**
+     * Delete Category
+     * @param \App\Models\Category $category
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroy(Category $category): RedirectResponse
     {
-        //
+        try {
+            CategoryRepository::destroyCategory($category);
+        } catch (\Throwable $th) {
+            Log::info($th->getMessage());
+            
+            return redirect()->back()->withErrors(
+                ['message' => 'Cant`t delete this category now']
+            );
+        }
+
+        return redirect(
+            '/'
+        );
     }
 
+    /**
+     * Show Category Products
+     * @param \App\Models\Category $category
+     * @return \Illuminate\View\View
+     */
     public function showProducts(Category $category): View
     {
         return view('categories.category', [
             'category' => $category,
-            'products' => CategoryRepository::getCategoryProducts($category)
+            'products' => CategoryRepository::getCategoryProducts($category)->paginate(15)
         ]);
     }
 }

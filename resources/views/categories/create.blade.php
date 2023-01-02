@@ -3,7 +3,7 @@
 @section('main')
     <section class="col-12 col-md-9 col-lg-6">
         <article class="card">
-            @if (isset($product))
+            @if (isset($category))
                 <form action="{{ route('category.update', [$category->id]) }}" method="post" class="card-body">
                 {{ method_field('PATCH') }}
             @else

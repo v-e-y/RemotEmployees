@@ -9,7 +9,6 @@ use App\Models\Category;
 use App\Events\CategoryCreated;
 use App\Events\CategoryDeleted;
 use App\Events\CategoryUpdated;
-use SebastianBergmann\Type\NullType;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Collection;
 
