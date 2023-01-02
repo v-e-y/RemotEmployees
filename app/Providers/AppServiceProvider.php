@@ -28,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Paginator::useBootstrapFive();
-        
+
         Schema::defaultStringLength(191);
         if (! Collection::hasMacro('paginate')) {
             Collection::macro(
@@ -48,7 +48,7 @@ class AppServiceProvider extends ServiceProvider
         }
 
         View::share(
-            'categories_menu', 
+            'categories_menu',
             CategoryRepository::getAllCategories()
         );
     }

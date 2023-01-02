@@ -15,6 +15,11 @@ use Illuminate\Database\Eloquent\Collection;
 
 final class ProductRepository
 {
+    /**
+     * Get Product by id
+     * @param string $id
+     * @return \App\Models\Product|null
+     */
     public static function getProduct(string $id): Product|null
     {
         return Cache::rememberForever(
@@ -49,13 +54,13 @@ final class ProductRepository
     {
         if (! $product->update($newData)) {
             return throw new Exception(
-                "We were unable to update the product" . $product->id, 
+                "We were unable to update the product" . $product->id,
                 1
             );
         }
 
         ProductUpdated::dispatch($product);
-        
+
         return $product;
     }
 

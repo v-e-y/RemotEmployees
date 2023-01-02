@@ -101,7 +101,7 @@ class CategoryController extends Controller
             CategoryRepository::destroyCategory($category);
         } catch (\Throwable $th) {
             Log::info($th->getMessage());
-            
+
             return redirect()->back()->withErrors(
                 ['message' => 'Cant`t delete this category now']
             );

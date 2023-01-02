@@ -44,7 +44,7 @@ class EventServiceProvider extends ServiceProvider
         ],
         CategoryDeleted::class => [
             ClearCategoryCache::class
-        ] 
+        ],
     ];
 
     /**

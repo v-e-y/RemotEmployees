@@ -31,7 +31,7 @@ final class CategoryRepository
             );
         }
 
-        if  ($slug) {
+        if ($slug) {
             return Cache::rememberForever(
                 Category::class . '_slug_' . $slug,
                 function () use ($slug) {
@@ -39,7 +39,7 @@ final class CategoryRepository
                 }
             );
         }
-        
+
         return null;
     }
 
@@ -99,7 +99,7 @@ final class CategoryRepository
      */
     public static function updateCategory(array $dataForUpdateCategory, Category $category): Category|Exception
     {
-        if ( ! $category->update($dataForUpdateCategory)) {
+        if (! $category->update($dataForUpdateCategory)) {
             return throw new Exception("Sorry something happen while updating category", 1);
         }
 
