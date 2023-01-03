@@ -17,6 +17,7 @@ final class ProductRepository
 {
     /**
      * Get Product by id
+     
      * @param string $id
      * @return \App\Models\Product|null
      */
@@ -38,9 +39,9 @@ final class ProductRepository
     public static function getAllProducts(): Collection
     {
         return Cache::rememberForever(Product::class, function () {
-            return Product::all(
+            return Product::select(
                 ['id', 'name', 'price', 'description', 'condition_id']
-            );
+            )->orderBy('created_at', 'desc')->get();
         });
     }
 

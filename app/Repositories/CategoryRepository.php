@@ -65,7 +65,9 @@ final class CategoryRepository
         return Cache::rememberForever(
             Category::class . '_' . $category->id . '_products',
             function () use ($category) {
-                return $category->products;
+                return $category->products()
+                    ->orderBy('created_at', 'desc')
+                    ->get();
             }
         );
     }

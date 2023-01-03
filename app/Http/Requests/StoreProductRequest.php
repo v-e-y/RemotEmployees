@@ -25,8 +25,9 @@ class StoreProductRequest extends FormRequest
             'name' => 'required|string|max:150',
             'description' => 'required|string|max:2000',
             'price' => ['numeric', 'between:0,999.99'],
-            'condition_id' => 'exists:App\Models\Condition,id',
-            'categories' => 'exists:App\Models\Category,id'
+            'condition_id' => 'required|exists:App\Models\Condition,id',
+            'categories' => 'required',
+            'categories.*' => 'exists:categories,id'
         ];
     }
 }

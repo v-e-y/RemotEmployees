@@ -43,7 +43,7 @@ class CategoryController extends Controller
         }
 
         return redirect(
-            route('category.products', [
+            route('category.showProducts', [
                 $category->slug
             ]),
             201
@@ -83,7 +83,7 @@ class CategoryController extends Controller
         }
 
         return redirect(
-            route('category.products', [
+            route('category.showProducts', [
                 $category->slug
             ]),
             201

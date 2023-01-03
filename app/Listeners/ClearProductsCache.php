@@ -32,7 +32,7 @@ class ClearProductsCache
 
         if ($event->product->categories->count()) {
             foreach ($event->product->categories as $category) {
-                CategoryUpdated::dispatch($category);
+                Cache::forget(Category::class . '_' . $category->id . '_products');
             }
         }
     }

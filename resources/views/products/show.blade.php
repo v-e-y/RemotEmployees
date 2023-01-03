@@ -15,6 +15,23 @@
             <p>
                 {{ $product->description }}
             </p>
+            @if (isset($product->categories) && $product->categories->count())
+                <div class="small">
+                    <ul class="list-inline">
+                        <li class="list-inline-item">Categories:</li>
+                        @foreach ($product->categories as $category)
+                            <li class="list-inline-item">
+                                <a 
+                                    href="{{ route('category.showProducts', [$category->slug]) }}"
+                                    title="{{ $category->name }} products"
+                                >
+                                    {{ $category->name }}
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
         </article>
         <aside class="pt-4 mt-4 border-top">
             <ul class="list-inline">

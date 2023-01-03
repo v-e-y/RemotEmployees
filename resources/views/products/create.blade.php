@@ -95,15 +95,15 @@
                                         type="checkbox" 
                                         value="{{ $category->id }}" 
                                         name="categories[]"
-                                        id="{{ $category->slug }}"
-                                        {{ (is_array(old('categories')) and in_array($category['slug'], old('categories'))) ? ' checked' : '' }}
+                                        id="{{ $category->id }}"
+                                        {{ (is_array(old('categories')) and in_array($category['id'], old('categories'))) ? ' checked' : '' }}
                                         @if (isset($product) && $product->categories->count())
                                             @foreach ($product->categories as $pCategory)
                                                 {{ ($pCategory->id === $category->id) ?  ' checked'  : '' }}
                                             @endforeach
                                         @endif 
                                     >
-                                    <label class="btn btn-sm btn-outline-secondary" for="{{ $category->slug }}">
+                                    <label class="btn btn-sm btn-outline-secondary" for="{{ $category->id }}">
                                         {{ $category->name }}
                                     </label>
                                 </div>
