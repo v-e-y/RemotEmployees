@@ -13,6 +13,7 @@ class LotTest extends TestCase
 {
     use WithFaker;
 
+    private Product $product;
     private string $name;
     private float $price;
     private string $description;
@@ -29,6 +30,7 @@ class LotTest extends TestCase
         $this->conditionId = Condition::inRandomOrder()->limit(1)->first()->id;
         $this->categories = CategoryRepository::getAllCategories()
             ->random(3)->pluck('id')->toArray();
+        $this->product = Product::inRandomOrder()->limit(1)->first();
     }
 
     public function test_create_lot_link_showed()
@@ -326,5 +328,89 @@ class LotTest extends TestCase
 
             $categoryPage->assertSeeText($this->name)->assertSeeText($this->description);
         }
+    }
+
+    public function test_delete_lot_response_ok()
+    {
+        /**
+         * @var Product random Product
+         */
+        $product = Product::inRandomOrder()->limit(1)->first();
+
+        $response = $this->get(route('product.destroy', [$product->id]));
+
+        $response->assertRedirectToRoute('index');
+
+        $this->assertEquals(null, Product::find($product->id));
+    }
+
+    public function test_delete_lot_dont_showed()
+    {
+        /**
+         * @var Product random Product
+         */
+        $product = Product::orderBy('created_at', 'desc')->first();
+
+        // Product showed before deleting
+        $this->get(route('index'))->assertSeeText($product->name);
+
+        // delete Product
+        $this->get(route('product.destroy', [$product->id]));
+
+        // Product not showed after deleting
+        $this->get(route('index'))->assertDontSeeText($product->name);
+    }
+
+    public function test_update_lot_page_response_ok()
+    {
+        $this->get(
+            route('product.edit', [$this->product->id])
+        )->assertOk();
+    }
+
+    public function test_update_lot_page_showed_field_text()
+    {
+        $response = $this->get(route('product.edit', [$this->product->id]));
+
+        $response->assertSeeText('Lot name')
+            ->assertSeeText('Price')
+            ->assertSeeText('Condition')
+            ->assertSeeText('Description')
+            ->assertSeeText('Choose a categories:')
+            ->assertSeeText('Update lot');
+    }
+
+    public function test_update_lot_page_showed_existed_data()
+    {
+        $response = $this->get(route('product.edit', [$this->product->id]));
+
+        $response->assertSee($this->product->name)
+            ->assertSee($this->product->description)
+            ->assertSee($this->product->price);
+
+        $condition = Condition::find($this->product->condition->id);
+        $response->assertSee($condition->name);
+
+        // TODO check checked checkboxes
+    }
+
+    public function test_update_lot()
+    {
+        $newName = 'UPDATE_TEST ' . $this->product->name;
+
+        $response = $this->patch(
+            route('product.update', [$this->product->id]),
+            [
+                'name' => $newName,
+                'price' => $this->product->price / 100,
+                'description' => $this->product->description,
+                'condition_id' => $this->product->condition_id,
+                'categories' => $this->categories
+            ]
+        );
+
+        $updatedProduct = $this->get(route('product.show', [$this->product->id]));
+
+        $updatedProduct->assertSeeText($newName);
     }
 }

@@ -60,6 +60,10 @@ final class ProductRepository
             );
         }
 
+        if ($newData['categories']) {
+            $product->categories()->sync($newData['categories']);
+        }
+
         ProductUpdated::dispatch($product);
 
         return $product;

@@ -118,7 +118,7 @@ class ProductController extends Controller
         }
 
         return redirect(
-            '/'
+            route('index')
         );
     }
 }
