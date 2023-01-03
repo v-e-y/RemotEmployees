@@ -405,7 +405,7 @@ class LotTest extends TestCase
                 'price' => $this->product->price / 100,
                 'description' => $this->product->description,
                 'condition_id' => $this->product->condition_id,
-                'categories' => $this->categories
+                'categories' => $this->product->categories->pluck('id')->toArray()
             ]
         );
 
